@@ -52,8 +52,11 @@ end
 #end
 
 bash "add-config-to-fstab" do
+  Chef::Log.info("removing config directory")
   code "rm -fR /data/choruscard/shared/config"
+  Chef::Log.info("creating config directory")
   code "mkdir /data/choruscard/shared/config"
+  Chef::Log.info("adding entry into /etc/fstab")
   code "echo 's3fs##{config_bucket} /data/choruscard/shared/config fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
   not_if "grep 's3fs##{config_bucket}' /etc/fstab"
 end
