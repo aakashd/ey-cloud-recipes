@@ -57,9 +57,12 @@ bash "add-config-to-fstab" do
   not_if "grep 's3fs##{config_bucket}' /etc/fstab"
 end
 
-execute "create empty config directory" do
+execute "remove existing config directory" do
   Chef::Log.info("2 - removing config directory")
   command "rm -fR /data/choruscard/shared/config"
+end
+
+execute "create empty config directory" do
   Chef::Log.info("3 - creating config directory")
   command "mkdir /data/choruscard/shared/config"
 end
