@@ -46,13 +46,13 @@ ruby_block "make-s3-bucket" do
 end
 
 bash "add-logs-to-fstab" do
-  code "rmdir /data/choruscard/shared/log"
+  #code "rmdir /data/choruscard/shared/log"
   code "echo 's3fs##{log_bucket} /data/choruscard/shared/log fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
   not_if "grep 's3fs##{log_bucket}' /etc/fstab"
 end
 
 bash "add-logs-to-fstab" do
-  code "rmdir /data/choruscard/shared/config"
+  #code "rmdir /data/choruscard/shared/config"
   code "echo 's3fs##{config_bucket} /data/choruscard/shared/config fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
   not_if "grep 's3fs##{config_bucket}' /etc/fstab"
 end
