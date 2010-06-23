@@ -57,4 +57,4 @@
 #uncomment to include the eybackup_verbose recipe
 #require_recipe "eybackup_verbose"
 
-require_recipe "s3fs_mount"
+#require_recipe "s3fs_mount"
