@@ -44,20 +44,21 @@ bash "add-config-to-fstab" do
   not_if "grep 's3fs##{config_bucket}' /etc/fstab"
 end
 
-execute "remove existing config directory" do
-  Chef::Log.info("2 - removing config directory")
-  command "rm -fR /data/choruscard/shared/config"
-  not_if "ps -A | grep s3fs"
-end
+#execute "remove existing config directory" do
+#  Chef::Log.info("2 - removing config directory")
+#  command "rm -fR /data/choruscard/shared/config"
+#end
 
-execute "create empty config directory" do
-  Chef::Log.info("3 - creating config directory")
-  command "mkdir /data/choruscard/shared/config"
-  not_if "ps -A | grep s3fs"
-end
+#execute "create empty config directory" do
+#  Chef::Log.info("3 - creating config directory")
+#  command "mkdir /data/choruscard/shared/config"
+#end
 
 bash "maybe-start-s3fs" do
-  #code "/usr/bin/s3fs #{log_bucket} /data/choruscard/shared/log -ouse_cache=/mnt/s3cache -oallow_other"
-  code "/usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other"
+  code <<- EOH 
+  rm -fR /data/choruscard/shared/config
+  mkdir /data/choruscard/shared/config
+  /usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other
+  EOH
   not_if "ps -A | grep s3fs"
 end
