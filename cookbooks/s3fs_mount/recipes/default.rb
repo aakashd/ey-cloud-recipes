@@ -3,13 +3,6 @@
 # Recipe:: default
 #
 
-http_request "reporting for s3fs" do
-  url node[:reporting_url]
-  message :message => "configuring s3fs"
-  action :post
-  epic_fail true
-end
-
 execute "modprobe-fuse" do
   command "modprobe fuse"
 end
