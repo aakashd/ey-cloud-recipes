@@ -45,20 +45,20 @@ ruby_block "make-s3-bucket" do
   end
 end
 
-bash "add-logs-to-fstab" do
+#bash "add-logs-to-fstab" do
   #code "rmdir /data/choruscard/shared/log"
-  code "echo 's3fs##{log_bucket} /data/choruscard/shared/log fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
-  not_if "grep 's3fs##{log_bucket}' /etc/fstab"
-end
+  #code "echo 's3fs##{log_bucket} /data/choruscard/shared/log fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
+  #not_if "grep 's3fs##{log_bucket}' /etc/fstab"
+#end
 
-bash "add-logs-to-fstab" do
+bash "add-config-to-fstab" do
   #code "rmdir /data/choruscard/shared/config"
   code "echo 's3fs##{config_bucket} /data/choruscard/shared/config fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
   not_if "grep 's3fs##{config_bucket}' /etc/fstab"
 end
 
 bash "maybe-start-s3fs" do
-  code "/usr/bin/s3fs #{log_bucket} /data/choruscard/shared/log -ouse_cache=/mnt/s3cache -oallow_other"
+  #code "/usr/bin/s3fs #{log_bucket} /data/choruscard/shared/log -ouse_cache=/mnt/s3cache -oallow_other"
   code "/usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other"
   not_if "ps -A | grep s3fs"
 end
