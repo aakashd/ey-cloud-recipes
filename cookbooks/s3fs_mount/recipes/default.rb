@@ -56,9 +56,9 @@ end
 
 bash "maybe-start-s3fs" do
   code <<- EOH 
-  rm -fR /data/choruscard/shared/config
-  mkdir /data/choruscard/shared/config
-  /usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other
+  "rm -fR /data/choruscard/shared/config"
+  "mkdir /data/choruscard/shared/config"
+  "/usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other"
   EOH
   not_if "ps -A | grep s3fs"
 end
