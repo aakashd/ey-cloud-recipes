@@ -38,12 +38,6 @@ ruby_block "make-s3-bucket" do
   end
 end
 
-#bash "add-logs-to-fstab" do
-  #code "rmdir /data/choruscard/shared/log"
-  #code "echo 's3fs##{log_bucket} /data/choruscard/shared/log fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
-  #not_if "grep 's3fs##{log_bucket}' /etc/fstab"
-#end
-
 bash "add-config-to-fstab" do
   Chef::Log.info("1 - adding entry into /etc/fstab")
   code "echo 's3fs##{config_bucket} /data/choruscard/shared/config fuse allow_other,accessKeyId=#{node[:aws_secret_id]},secretAccessKey=#{node[:aws_secret_key]},use_cache=/mnt/s3cache 0 0' >> /etc/fstab"
@@ -53,11 +47,13 @@ end
 execute "remove existing config directory" do
   Chef::Log.info("2 - removing config directory")
   command "rm -fR /data/choruscard/shared/config"
+  not_if "ps -A | grep s3fs"
 end
 
 execute "create empty config directory" do
   Chef::Log.info("3 - creating config directory")
   command "mkdir /data/choruscard/shared/config"
+  not_if "ps -A | grep s3fs"
 end
 
 bash "maybe-start-s3fs" do
