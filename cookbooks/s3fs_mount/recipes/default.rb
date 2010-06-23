@@ -69,6 +69,6 @@ end
 
 bash "maybe-start-s3fs" do
   #code "/usr/bin/s3fs #{log_bucket} /data/choruscard/shared/log -ouse_cache=/mnt/s3cache -oallow_other"
-  #code "/usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other -ononempty"
+  code "/usr/bin/s3fs #{config_bucket} /data/choruscard/shared/config -ouse_cache=/mnt/s3cache -oallow_other"
   not_if "ps -A | grep s3fs"
 end
